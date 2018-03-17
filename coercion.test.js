@@ -93,3 +93,80 @@ describe('- operator', () => {
     expect(test3).toBeNaN();
   });
 });
+
+describe('implicit boolean coercion', () => {
+  describe(`when a value is passed: 
+    to an if condition, 
+    to the test condition in a for loop header, 
+    to a while/do while loop test condition, 
+    to the test condition in a ? : epression,
+    as the left hand operand in a || or && expression`, () => {
+    it('should be implicitly coerced to a boolean value', () => {
+      // the JS engine defines an internal algorithm ToBoolean to converet a value that
+      // isn't already a boolean into a boolean value by checking if it's one of the 5 falsy
+      // values the spec defines: 1. undefined, 2. null, 3. 0 or -0 or NaN, 4. "", 5. false.
+      // If the value isn't a member of that list, it's truthy
+
+      const a = 42;
+      const b = 'abc';
+      let c;
+      const d = null;
+
+      expect(a).toBeTruthy();
+      expect(c).toBeFalsy();
+      expect(d ? a : b).toBeTruthy();
+      expect((a && d) || c).toBeFalsy();
+      expect((a && b) || c).toBeTruthy();
+    });
+  });
+
+  describe('short circut operators && and ||', () => {
+    describe('&&', () => {
+      describe('when the value on the left is truthy', () => {
+        it('should return the value on the right', () => {
+          const a = 42;
+          const b = 'abc';
+          const c = null;
+
+          expect(a && b).toBe(b);
+          expect(b && c).toBe(c);
+        });
+      });
+
+      describe('when the value on the left is falsy', () => {
+        it('should return the value on the left', () => {
+          const a = 42;
+          const c = null;
+
+          expect(c && a).toBe(c);
+        });
+      });
+    });
+
+    describe('||', () => {
+      describe('when the value on the left is truthy', () => {
+        it('should return the value on the left', () => {
+          const a = 42;
+          const b = 'abc';
+          const c = null;
+
+          expect(a || b).toBe(a);
+          expect(b || c).toBe(b);
+          expect(a && (b || c)).toBeTruthy();
+          expect(a && (c || b)).toBeTruthy();
+        });
+      });
+
+      describe('when the value on the left is falsy', () => {
+        it('should return the value on the right', () => {
+          const a = 42;
+          let b;
+          const c = null;
+
+          expect(c || a).toBe(a);
+          expect(c || b).toBe(b);
+        });
+      });
+    });
+  });
+});
