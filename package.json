@@ -1,0 +1,22 @@
+{
+  "name": "coercion",
+  "version": "1.0.0",
+  "description": "A test suite to demonstrate JS implicit coercion",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watchAll"
+  },
+  "jest": {
+    "browser": true
+  },
+  "keywords": ["JavaScript"],
+  "author": "Shane Unger",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint-config-eslint-prettier": "^1.0.1",
+    "jest": "^22.4.2"
+  }
+}
