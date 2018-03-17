@@ -170,3 +170,118 @@ describe('implicit boolean coercion', () => {
     });
   });
 });
+
+/* eslint eqeqeq: 0 */
+describe('strict === and loose ==', () => {
+  // '===' disallows coercion, '==' allows coercion
+  describe('when comparing values with ==== and == of the same types', () => {
+    it('should return the same result for either equality check', () => {
+      // when the types are identical both equality checks use the same algorithm to
+      // test equality
+
+      const a = 42;
+      const b = 42;
+      const c = 'hello';
+      const d = 'hello';
+
+      expect(a === b).toBe(true);
+      expect(a == b).toBe(true);
+      expect(c === d).toBe(true);
+      expect(c == d).toBe(true);
+      expect(a === d).toBe(false);
+      expect(a == d).toBe(false);
+    });
+
+    describe('when comparing objects', () => {
+      describe('when using === or ==', () => {
+        // when comparing objects '===' and '==' behave exaclty the same
+        it('should return true only if values being compared hold a refernce to the same object', () => {
+          const obj = { a: `I'm an object` };
+          const arr = [1, 2, 3];
+          const func = () => {};
+
+          const objWithFunc = {
+            a: func,
+          };
+
+          const objWithFunc2 = {
+            b: func,
+          };
+
+          const a = obj;
+          const b = obj;
+
+          const a2 = arr;
+          const b2 = arr;
+
+          const a3 = func;
+          const b3 = func;
+
+          expect(a === b).toBe(true);
+          expect(a == b).toBe(true);
+          expect(a === obj).toBe(true);
+          expect(a == obj).toBe(true);
+          expect(b === obj).toBe(true);
+          expect(b == obj).toBe(true);
+
+          expect(a2 === b2).toBe(true);
+          expect(a2 == b2).toBe(true);
+          expect(a2 === arr).toBe(true);
+          expect(a2 == arr).toBe(true);
+          expect(b2 === arr).toBe(true);
+          expect(b2 == arr).toBe(true);
+
+          expect(a3 === b3).toBe(true);
+          expect(a3 == b3).toBe(true);
+          expect(a3 === func).toBe(true);
+          expect(a3 == func).toBe(true);
+          expect(b3 === func).toBe(true);
+          expect(b3 == func).toBe(true);
+
+          expect(objWithFunc.a === objWithFunc2.b).toBe(true);
+          expect(objWithFunc.a == objWithFunc2.b).toBe(true);
+          expect(objWithFunc.a == func).toBe(true);
+          expect(objWithFunc2.b == func).toBe(true);
+        });
+
+        it('should return false if values do not refer to same object', () => {
+          const obj = { a: `I'm an object` };
+          const obj2 = { a: `I'm an object` };
+          const arr = [1, 2, 3];
+          const func = () => {};
+          const objWithFunc = {
+            a: func,
+          };
+          const objWithFunc2 = {
+            b: () => {},
+          };
+
+          const a = obj;
+          const b = obj2;
+
+          const a2 = arr;
+          const b2 = [1, 2, 3];
+
+          expect(a === b).toBe(false);
+          expect(a == b).toBe(false);
+          expect(obj === obj2).toBe(false);
+          expect(obj == obj2).toBe(false);
+          expect(a2 === b2).toBe(false);
+          expect(a2 == b2).toBe(false);
+          expect(objWithFunc.a === objWithFunc2.b).toBe(false);
+          expect(objWithFunc.a == objWithFunc2.b).toBe(false);
+        });
+      });
+    });
+  });
+
+  describe('NaN equality properties', () => {
+    describe('when NaN is compared to itself', () => {
+      it('should return false', () => {
+        // NaN is the only value in JS to not equal itself
+        expect(NaN === NaN).toBe(false);
+        expect(NaN == NaN).toBe(false);
+      });
+    });
+  });
+});
