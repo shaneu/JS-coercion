@@ -191,86 +191,86 @@ describe('strict === and loose ==', () => {
       expect(a === d).toBe(false);
       expect(a == d).toBe(false);
     });
+  });
 
-    describe('when comparing objects', () => {
-      describe('when using === or ==', () => {
-        // when comparing objects '===' and '==' behave exaclty the same
-        it('should return true only if values being compared hold a refernce to the same object', () => {
-          const obj = { a: `I'm an object` };
-          const arr = [1, 2, 3];
-          const func = () => {};
+  describe('when comparing objects', () => {
+    describe('when using === or ==', () => {
+      // when comparing objects '===' and '==' behave exaclty the same
+      it('should return true only if values being compared hold a refernce to the same object', () => {
+        const obj = { a: `I'm an object` };
+        const arr = [1, 2, 3];
+        const func = () => {};
 
-          const objWithFunc = {
-            a: func,
-          };
+        const objWithFunc = {
+          a: func,
+        };
 
-          const objWithFunc2 = {
-            b: func,
-          };
+        const objWithFunc2 = {
+          b: func,
+        };
 
-          const a = obj;
-          const b = obj;
+        const a = obj;
+        const b = obj;
 
-          const a2 = arr;
-          const b2 = arr;
+        const a2 = arr;
+        const b2 = arr;
 
-          const a3 = func;
-          const b3 = func;
+        const a3 = func;
+        const b3 = func;
 
-          expect(a === b).toBe(true);
-          expect(a == b).toBe(true);
-          expect(a === obj).toBe(true);
-          expect(a == obj).toBe(true);
-          expect(b === obj).toBe(true);
-          expect(b == obj).toBe(true);
+        expect(a === b).toBe(true);
+        expect(a == b).toBe(true);
+        expect(a === obj).toBe(true);
+        expect(a == obj).toBe(true);
+        expect(b === obj).toBe(true);
+        expect(b == obj).toBe(true);
 
-          expect(a2 === b2).toBe(true);
-          expect(a2 == b2).toBe(true);
-          expect(a2 === arr).toBe(true);
-          expect(a2 == arr).toBe(true);
-          expect(b2 === arr).toBe(true);
-          expect(b2 == arr).toBe(true);
+        expect(a2 === b2).toBe(true);
+        expect(a2 == b2).toBe(true);
+        expect(a2 === arr).toBe(true);
+        expect(a2 == arr).toBe(true);
+        expect(b2 === arr).toBe(true);
+        expect(b2 == arr).toBe(true);
 
-          expect(a3 === b3).toBe(true);
-          expect(a3 == b3).toBe(true);
-          expect(a3 === func).toBe(true);
-          expect(a3 == func).toBe(true);
-          expect(b3 === func).toBe(true);
-          expect(b3 == func).toBe(true);
+        expect(a3 === b3).toBe(true);
+        expect(a3 == b3).toBe(true);
+        expect(a3 === func).toBe(true);
+        expect(a3 == func).toBe(true);
+        expect(b3 === func).toBe(true);
+        expect(b3 == func).toBe(true);
 
-          expect(objWithFunc.a === objWithFunc2.b).toBe(true);
-          expect(objWithFunc.a == objWithFunc2.b).toBe(true);
-          expect(objWithFunc.a == func).toBe(true);
-          expect(objWithFunc2.b == func).toBe(true);
-        });
+        expect(objWithFunc.a === objWithFunc2.b).toBe(true);
+        expect(objWithFunc.a == objWithFunc2.b).toBe(true);
+        expect(objWithFunc.a == func).toBe(true);
+        expect(objWithFunc2.b == func).toBe(true);
+      });
 
-        it('should return false if values do not refer to same object', () => {
-          const obj = { a: `I'm an object` };
-          const obj2 = { a: `I'm an object` };
-          const arr = [1, 2, 3];
-          const func = () => {};
-          const objWithFunc = {
-            a: func,
-          };
-          const objWithFunc2 = {
-            b: () => {},
-          };
+      it('should return false if values do not refer to same object', () => {
+        const obj = { a: `I'm an object` };
+        const obj2 = { a: `I'm an object` };
+        const arr = [1, 2, 3];
+        const func = () => {};
+        const objWithFunc = {
+          a: func,
+        };
+        const objWithFunc2 = {
+          b: () => {},
+        };
 
-          const a = obj;
-          const b = obj2;
+        const a = obj;
+        const b = obj2;
 
-          const a2 = arr;
-          const b2 = [1, 2, 3];
+        const a2 = arr;
+        const b2 = [1, 2, 3];
 
-          expect(a === b).toBe(false);
-          expect(a == b).toBe(false);
-          expect(obj === obj2).toBe(false);
-          expect(obj == obj2).toBe(false);
-          expect(a2 === b2).toBe(false);
-          expect(a2 == b2).toBe(false);
-          expect(objWithFunc.a === objWithFunc2.b).toBe(false);
-          expect(objWithFunc.a == objWithFunc2.b).toBe(false);
-        });
+        expect(a === b).toBe(false);
+        expect(a == b).toBe(false);
+        expect(obj === obj2).toBe(false);
+        expect(obj == obj2).toBe(false);
+        expect(a2 === b2).toBe(false);
+        expect(a2 == b2).toBe(false);
+        expect(objWithFunc.a === objWithFunc2.b).toBe(false);
+        expect(objWithFunc.a == objWithFunc2.b).toBe(false);
       });
     });
   });
@@ -281,6 +281,147 @@ describe('strict === and loose ==', () => {
         // NaN is the only value in JS to not equal itself
         expect(NaN === NaN).toBe(false);
         expect(NaN == NaN).toBe(false);
+      });
+    });
+  });
+
+  describe('stings to numbers', () => {
+    describe('when compared with ==', () => {
+      it('should return true for stings that contain the same value as a number', () => {
+        const a = '42';
+        const b = 42;
+
+        // consider x == y: if x is a number and y is a string, return the result of calling
+        // internal ToNumber coercion algorithm on y, so compare number to number. If x is a
+        // string and y is a number call internal ToNumber on x
+
+        // allows coercion
+        expect(a == b).toBe(true);
+        // does not allow coercion
+        expect(a === b).toBe(false);
+      });
+    });
+  });
+
+  describe('comparing anything to a boolean with ==', () => {
+    it('should convert the boolean to a number, then compare', () => {
+      const a = '42';
+      const b = true;
+
+      // when comparing a non-boolean value to a boolean, the engine will call the internal
+      // ToNumber algorithm on the boolean value and then compare the values. In the case of 'true',
+      // ToBoolean returns 1, 0 for 'false'. In this case, the boolean value is coerced to 1, and then compared
+      // with the string "42". That string is then convereted to a number, and the comparison of 1 == 42 returns
+      // false, even though both are truthy values.
+      expect(a == b).toBe(false);
+      expect(b == 1).toBe(true);
+
+      // here the boolean true is coerced to a number, 1, and compared to the string 'true'. Becuase they
+      // are of different types, the engine will attempt to convert 'true' to a number, but can't,
+      // so returns false
+      expect('true' == true).toBe(false);
+    });
+  });
+
+  describe('comparing nulls to undefineds', () => {
+    describe('when using ==', () => {
+      it('should be true that null is loosley equal to undefined', () => {
+        // when null and undefined are compared using the == opeartor, they
+        // coerce to eachothers value and are loosley equal to themselves,
+        // and only themselves, no other value, even if that value is falsy
+
+        const a = null;
+        const b = undefined;
+
+        expect(a == b).toBe(true);
+        expect(a == null).toBe(true);
+        expect(b == null).toBe(true);
+
+        expect(a == false).toBe(false);
+        expect(b == false).toBe(false);
+
+        expect(a == '').toBe(false);
+        expect(b == '').toBe(false);
+
+        expect(a == 0).toBe(false);
+        expect(b == 0).toBe(false);
+      });
+    });
+  });
+
+  describe('comparing objects to nonobjects', () => {
+    // the js engine calls the internal ToPrimitive algorithm on the object value to
+    // return a primitave value. In the case the object is being compared to a string,
+    // the equalty check is done at this point. If the object is being compared to a number
+    // the internal ToNumber algorithm is called on the now string representation of the object
+    // and both numbers are compared
+    describe('when the object is convereted to a primitive value', () => {
+      it('should return true if both values are the same', () => {
+        const a = [42];
+        const b = 42;
+
+        const a2 = 'abc';
+        const b2 = new String(a2);
+
+        const a3 = null;
+        // same as {}, null and undefined can't be boxed
+        const b3 = new Object(a3);
+
+        const a4 = undefined;
+        // same as {}, null and undefined can't be boxed
+        const b4 = new Object(a4);
+
+        const a5 = NaN;
+        const b5 = new Object(NaN);
+
+        expect(a == b).toBe(true);
+        expect(a2 == b2).toBe(true);
+        expect(b2.valueOf()).toBe(a2);
+        expect(a2 === b2).toBe(false);
+        // null is only loosley equal to null or undefined
+        expect(a3 == b3).toBe(false);
+        // same reason as above;
+        expect(a4 == b4).toBe(false);
+        // NaN is the only value that is not equal to itself
+        expect(a5 == b5).toBe(false);
+      });
+    });
+  });
+
+  describe('Falsy comparisons', () => {
+    describe('when 25 flasy values are compared with eachother', () => {
+      it('should provide reasonable results for 17 of the comparisons', () => {
+        expect('0' == null).toBe(false);
+        expect(undefined == '0').toBe(false);
+        expect(NaN == '0').toBe(false);
+        expect('0' == 0).toBe(true);
+        expect('0' == '').toBe(false);
+        expect(false == null).toBe(false);
+        expect(undefined == false).toBe(false);
+        expect(NaN == false).toBe(false);
+        expect({} == false).toBe(false);
+        expect({} == false).toBe(false);
+        expect('' == null).toBe(false);
+        expect(undefined == '').toBe(false);
+        expect(NaN == '').toBe(false);
+        expect({} == '').toBe(false);
+        expect(0 == null).toBe(false);
+        expect(undefined == 0).toBe(false);
+        expect(NaN == 0).toBe(false);
+        expect({} == 0).toBe(false);
+      });
+
+      it('should produce 7 results that are unxepected', () => {
+        // false is coerced to the number 0 then compared against the
+        // string '0'. This string is then coerced to a number, and 0 is compared
+        // to 0
+        expect('0' == false).toBe(true);
+        expect(false == 0).toBe(true);
+        expect(false == '').toBe(true);
+        expect([] == false).toBe(true);
+        expect('' == 0).toBe(true);
+        expect([] == '').toBe(true);
+        expect([] == 0).toBe(true);
       });
     });
   });
