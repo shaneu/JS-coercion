@@ -3,10 +3,12 @@ describe('+ operator', () => {
     /* eslint-disable-next-line */
     const test1 = [1, 2, 3] + 'hello';
     const expectedResult1 = '1,2,3hello';
+    expect(test1).toBe(expectedResult1);
 
     /* eslint-disable-next-line */
     const test2 = { a: 'hey' } + 'hello';
     const expectedResult2 = '[object Object]hello';
+    expect(test2).toBe(expectedResult2);
 
     const func = () => 'Oh, ';
     /* eslint-disable-next-line */
@@ -15,29 +17,36 @@ describe('+ operator', () => {
     const expectedResult3 = `function func() {
       return 'Oh, ';
     }hello`;
+    expect(test3).toBe(expectedResult3);
 
     /* eslint-disable-next-line */
     const test4 = [1, 2, 3] + [4, 5, 6];
     const expectedResult4 = '1,2,34,5,6';
+    expect(test4).toBe(expectedResult4);
 
     /* eslint-disable-next-line */
     const test5 = [1] + 2;
     const expectedResult5 = '12';
+    expect(test5).toBe(expectedResult5);
 
     const test6 = {} + [];
     const expectedResult6 = '[object Object]';
+    expect(test6).toBe(expectedResult6);
 
     /* eslint-disable-next-line */
     const test7 = 2 + '42';
     const expectedResult7 = '242';
+    expect(test7).toBe(expectedResult7);
 
     /* eslint-disable-next-line */
     const test8 = '2' + 42;
     const expectedResult8 = '242';
+    expect(test8).toBe(expectedResult8);
 
     /* eslint-disable-next-line */
     const test9 = '' + 42;
     const expectedResult9 = '42';
+    expect(test9).toBe(expectedResult9);
 
     // It should be noted In the case of using the '+' operator to perform implicit coercion of a value
     // to produce a string, the JS engine calls an internal algorithm ToPrimitive on the value.
@@ -55,21 +64,11 @@ describe('+ operator', () => {
     /* eslint-disable-next-line */
     const test10 = obj + '';
     const expectedResult10 = '42';
+    expect(test10).toBe(expectedResult10);
 
     /* eslint-disable-next-line */
     const test11 = String(obj);
     const expectedResult11 = '2';
-
-    expect(test1).toBe(expectedResult1);
-    expect(test2).toBe(expectedResult2);
-    expect(test3).toBe(expectedResult3);
-    expect(test4).toBe(expectedResult4);
-    expect(test5).toBe(expectedResult5);
-    expect(test6).toBe(expectedResult6);
-    expect(test7).toBe(expectedResult7);
-    expect(test8).toBe(expectedResult8);
-    expect(test9).toBe(expectedResult9);
-    expect(test10).toBe(expectedResult10);
     expect(test11).toBe(expectedResult11);
   });
 });
@@ -78,6 +77,7 @@ describe('- operator', () => {
   it('should implicitly coerce a value to a number', () => {
     const test1 = '3.456' - 0;
     const expectedResult1 = 3.456;
+    expect(test1).toBe(expectedResult1);
 
     // much like the + operator, the internal ToPrimitive is called on an [] object which first
     // tries .valueOf to produce a string, then .toString() when that fails to produce
@@ -85,11 +85,9 @@ describe('- operator', () => {
     // those string values are then coerced into numbers before finally being subtracted
     const test2 = [3] - [1];
     const expectedResult2 = 2;
+    expect(test2).toBe(expectedResult2);
 
     const test3 = {} - 2;
-
-    expect(test1).toBe(expectedResult1);
-    expect(test2).toBe(expectedResult2);
     expect(test3).toBeNaN();
   });
 });
@@ -172,6 +170,11 @@ describe('implicit boolean coercion', () => {
 });
 
 /* eslint eqeqeq: 0 */
+
+// 1. If either side of the comparison can have true or false values
+// dont ever use '=='
+// 2. If either side of the comparison can have '', 0, [], seriously consider
+// not using '=='
 describe('strict === and loose ==', () => {
   // '===' disallows coercion, '==' allows coercion
   describe('when comparing values with ==== and == of the same types', () => {
@@ -208,16 +211,13 @@ describe('strict === and loose ==', () => {
         const objWithFunc2 = {
           b: func,
         };
+        expect(objWithFunc.a === objWithFunc2.b).toBe(true);
+        expect(objWithFunc.a == objWithFunc2.b).toBe(true);
+        expect(objWithFunc.a == func).toBe(true);
+        expect(objWithFunc2.b == func).toBe(true);
 
         const a = obj;
         const b = obj;
-
-        const a2 = arr;
-        const b2 = arr;
-
-        const a3 = func;
-        const b3 = func;
-
         expect(a === b).toBe(true);
         expect(a == b).toBe(true);
         expect(a === obj).toBe(true);
@@ -225,6 +225,8 @@ describe('strict === and loose ==', () => {
         expect(b === obj).toBe(true);
         expect(b == obj).toBe(true);
 
+        const a2 = arr;
+        const b2 = arr;
         expect(a2 === b2).toBe(true);
         expect(a2 == b2).toBe(true);
         expect(a2 === arr).toBe(true);
@@ -232,23 +234,22 @@ describe('strict === and loose ==', () => {
         expect(b2 === arr).toBe(true);
         expect(b2 == arr).toBe(true);
 
+        const a3 = func;
+        const b3 = func;
         expect(a3 === b3).toBe(true);
         expect(a3 == b3).toBe(true);
         expect(a3 === func).toBe(true);
         expect(a3 == func).toBe(true);
         expect(b3 === func).toBe(true);
         expect(b3 == func).toBe(true);
-
-        expect(objWithFunc.a === objWithFunc2.b).toBe(true);
-        expect(objWithFunc.a == objWithFunc2.b).toBe(true);
-        expect(objWithFunc.a == func).toBe(true);
-        expect(objWithFunc2.b == func).toBe(true);
       });
 
       it('should return false if values do not refer to same object', () => {
         const obj = { a: `I'm an object` };
         const obj2 = { a: `I'm an object` };
-        const arr = [1, 2, 3];
+        expect(obj === obj2).toBe(false);
+        expect(obj == obj2).toBe(false);
+
         const func = () => {};
         const objWithFunc = {
           a: func,
@@ -256,21 +257,19 @@ describe('strict === and loose ==', () => {
         const objWithFunc2 = {
           b: () => {},
         };
+        expect(objWithFunc.a === objWithFunc2.b).toBe(false);
+        expect(objWithFunc.a == objWithFunc2.b).toBe(false);
 
         const a = obj;
         const b = obj2;
-
-        const a2 = arr;
-        const b2 = [1, 2, 3];
-
         expect(a === b).toBe(false);
         expect(a == b).toBe(false);
-        expect(obj === obj2).toBe(false);
-        expect(obj == obj2).toBe(false);
+
+        const arr = [1, 2, 3];
+        const a2 = arr;
+        const b2 = [1, 2, 3];
         expect(a2 === b2).toBe(false);
         expect(a2 == b2).toBe(false);
-        expect(objWithFunc.a === objWithFunc2.b).toBe(false);
-        expect(objWithFunc.a == objWithFunc2.b).toBe(false);
       });
     });
   });
@@ -359,29 +358,27 @@ describe('strict === and loose ==', () => {
       it('should return true if both values are the same', () => {
         const a = [42];
         const b = 42;
+        expect(a == b).toBe(true);
 
         const a2 = 'abc';
         const b2 = new String(a2);
+        expect(a2 == b2).toBe(true);
+        expect(b2.valueOf()).toBe(a2);
+        expect(a2 === b2).toBe(false);
 
         const a3 = null;
         // same as {}, null and undefined can't be boxed
         const b3 = new Object(a3);
+        // null is only loosley equal to null or undefined
+        expect(a3 == b3).toBe(false);
 
         const a4 = undefined;
         // same as {}, null and undefined can't be boxed
         const b4 = new Object(a4);
+        expect(a4 == b4).toBe(false);
 
         const a5 = NaN;
         const b5 = new Object(NaN);
-
-        expect(a == b).toBe(true);
-        expect(a2 == b2).toBe(true);
-        expect(b2.valueOf()).toBe(a2);
-        expect(a2 === b2).toBe(false);
-        // null is only loosley equal to null or undefined
-        expect(a3 == b3).toBe(false);
-        // same reason as above;
-        expect(a4 == b4).toBe(false);
         // NaN is the only value that is not equal to itself
         expect(a5 == b5).toBe(false);
       });
@@ -416,12 +413,32 @@ describe('strict === and loose ==', () => {
         // string '0'. This string is then coerced to a number, and 0 is compared
         // to 0
         expect('0' == false).toBe(true);
+        // same as above, false is coerced to 0
         expect(false == 0).toBe(true);
+        // false is convered to 0, and ToNumber is called on '', resulting in 0
         expect(false == '').toBe(true);
+        // ToPrimitive and ToBoolean come into play here. ToBoolean converts false to 0.
+        // ToPrimitive is called on the array object. It tries valueOf first to return a primitive
+        // value. When that fails it tries .toString(), which returns ''. The == algorithm attempts to
+        // coerce the values to the same time, so '' is converted to a number, resulting in 0.
         expect([] == false).toBe(true);
         expect('' == 0).toBe(true);
         expect([] == '').toBe(true);
         expect([] == 0).toBe(true);
+      });
+
+      describe('crazy corner cases', () => {
+        it('should shock and awe', () => {
+          // First, the unary ! operator flips the value of []. Since [] isn't one of the
+          // 5 falsy values in JS, it is true, and the ! operator makes it false. We are then
+          // comparing [] == false. As we've seen, false is coerced to 0, ToPrimitive coerces []
+          // to the string '', which == then coerces to the number 0, and 0 is equal to 0
+
+          expect([] == ![]).toBe(true);
+          // ToPrimitive is called on [null], which ends up using .toString() to coerce a primitive
+          // value. The result, '' is then compared to '', and the result is true
+          expect([null] == '').toBe(true);
+        });
       });
     });
   });
